@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Selection Project</title>
+    <style>
+        .h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .bucket {
+            border: 1px solid black;
+            width: 200px;
+            height: 300px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+        }
+        .course, .selectedCourse {
+            border: 1px solid black;
+            padding: 5px;
+            width: 90%;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .selectedCourse {
+            background-color: deepskyblue;
+        }
+        #totalCredits {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h1 class="h1" >Class Selection Page</h1>
+
+<div class="container">
+    <div id="availableCourses" class="bucket">Available Courses</div>
+    <div id="selectedCourses" class="bucket">Selected Courses</div>
+</div>
+<div id="totalCredits">Total Credits: 0</div>
+<button id="selectButton" class="button">Select</button>
+
+<script src="Course_Selection.js"></script>
+</body>
+</html>
