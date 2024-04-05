@@ -15,23 +15,30 @@ class CourseModel {
 
     selectCourse(courseId) {
         const course = this.courses.find(course => course.courseId === courseId);
-        if (course && !this.selectedCourses.includes(course)) {
-            if (this.totalCredits + course.credit <= 18) {
-                this.selectedCourses.push(course);
-                this.totalCredits += course.credit;
+        if (course) {
+            if (!course.isSelected) { // Add this condition to prevent selecting already selected course
+                if (this.totalCredits + course.credit <= 18) {
+                    this.selectedCourses.push(course);
+                    this.totalCredits += course.credit;
+                    course.isSelected = true; // Mark the course as selected
+                } else {
+                    alert("You can only choose up to 18 credits in one semester");
+                }
             } else {
-                alert("You can only choose up to 18 credits in one semester");
+                this.unselectCourse(courseId); // If course is already selected, unselect it
             }
         }
     }
-
+    
     unselectCourse(courseId) {
         const courseIndex = this.selectedCourses.findIndex(course => course.courseId === courseId);
         if (courseIndex > -1) {
             this.totalCredits -= this.selectedCourses[courseIndex].credit;
             this.selectedCourses.splice(courseIndex, 1);
+            this.courses.find(course => course.courseId === courseId).isSelected = false; // Mark the course as not selected
         }
-    }
+    }      
+    
 }
 
 class CourseView {
