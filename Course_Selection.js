@@ -46,20 +46,26 @@ class CourseView {
     }
 
     renderCourses() {
-        this.availableCoursesContainer.innerHTML = '';
-        this.controller.getCourses().forEach(course => {
+        this.availableCoursesContainer.innerHTML = '<strong>Available Courses</strong>';
+        this.selectedCoursesContainer.innerHTML = '<strong>Selected Courses</strong>';
+        
+        this.controller.getCourses().forEach((course, index) => {
             const courseElement = document.createElement('div');
-            courseElement.innerHTML = `<strong>${course.courseName}</strong> - ${course.required ? 'Compulsory' : 'Elective'} - ${course.credit} Credits`;
+            courseElement.innerHTML = `${course.courseName} <br> ${course.required ? 'Compulsory' : 'Elective'} <br> ${course.credit} Credits`;
             courseElement.className = 'course';
-            courseElement.addEventListener('click', () => this.controller.handleCourseClick(course.courseId));
+            courseElement.style.backgroundColor = index % 2 === 0 ? 'lightgreen' : 'white';
+            courseElement.addEventListener('click', () => {
+                this.controller.handleCourseClick(course.courseId);
+                courseElement.style.backgroundColor = 'deepskyblue';
+            });
             this.availableCoursesContainer.appendChild(courseElement);
         });
 
-        this.selectedCoursesContainer.innerHTML = '';
-        this.controller.getSelectedCourses().forEach(course => {
+        this.controller.getSelectedCourses().forEach((course, index) => {
             const courseElement = document.createElement('div');
-            courseElement.textContent = `${course.courseName} - ${course.credit} Credits`;
+            courseElement.innerHTML = `${course.courseName} <br> ${course.required ? 'Compulsory' : 'Elective'} <br> ${course.credit} Credits`;
             courseElement.className = 'selectedCourse';
+            courseElement.style.backgroundColor = index % 2 === 0 ? 'lightgreen' : 'white';
             this.selectedCoursesContainer.appendChild(courseElement);
         });
 
@@ -97,6 +103,17 @@ class CourseController {
             this.model.selectCourse(courseId);
         }
         this.view.renderCourses();
+    }
+    
+    toggleCourseSelection(courseId) {
+        const isSelected = this.model.selectedCourses.some(course => course.courseId === courseId);
+        if (isSelected) {
+            this.model.unselectCourse(courseId);
+        } else {
+            this.model.selectCourse(courseId);
+        }
+        // this.view.renderCourses();
+        // Do not re-render courses here to wait for "Select" button click
     }
 
     handleSelectButtonClick() {
