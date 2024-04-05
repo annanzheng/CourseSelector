@@ -8,7 +8,7 @@ class CourseModel {
     async fetchCourses() {
         const response = await fetch('http://localhost:4232/courseList');
         this.courses = await response.json();
-        this.courses.forEach(course=> {
+        this.courses.forEach(course => {
             course.isSelected = false;
          });         
     }
@@ -69,7 +69,10 @@ class CourseView {
             });
             this.availableCoursesContainer.appendChild(courseElement);
         });
-
+        this.totalCreditsContainer.textContent = `Total Credits: ${this.controller.getTotalCredits()}`;
+    }
+    renderSelectedCourses() {
+        this.selectedCoursesContainer.innerHTML = '<strong>Selected Courses</strong>';
         this.controller.getSelectedCourses().forEach((course, index) => {
             const courseElement = document.createElement('div');
             courseElement.innerHTML = `${course.courseName} <br> ${course.required ? 'Compulsory' : 'Elective'} <br> ${course.credit} Credits`;
@@ -77,8 +80,6 @@ class CourseView {
             courseElement.style.backgroundColor = index % 2 === 0 ? 'lightgreen' : 'white';
             this.selectedCoursesContainer.appendChild(courseElement);
         });
-
-        this.totalCreditsContainer.textContent = `Total Credits: ${this.controller.getTotalCredits()}`;
     }
 }
 
@@ -133,7 +134,8 @@ class CourseController {
         const confirmation = confirm(`You have chosen ${this.model.totalCredits} credits for this semester. You cannot change once you submit. Do you want to confirm?`);
         if (confirmation) {
             this.view.selectButton.disabled = true;
-            // Further actions after confirmation
+        // Call the new method to render selected courses upon confirmation
+            this.view.renderSelectedCourses();
         }
     }
 }
