@@ -8,6 +8,9 @@ class CourseModel {
     async fetchCourses() {
         const response = await fetch('http://localhost:4232/courseList');
         this.courses = await response.json();
+        this.courses.forEach(course=> {
+            course.isSelected = false;
+         });         
     }
 
     selectCourse(courseId) {
@@ -53,10 +56,9 @@ class CourseView {
             const courseElement = document.createElement('div');
             courseElement.innerHTML = `${course.courseName} <br> ${course.required ? 'Compulsory' : 'Elective'} <br> ${course.credit} Credits`;
             courseElement.className = 'course';
-            courseElement.style.backgroundColor = index % 2 === 0 ? 'lightgreen' : 'white';
+            courseElement.style.backgroundColor = course.isSelected === true ? 'deepskyblue' : index % 2 === 0 ? 'lightgreen' : 'white';
             courseElement.addEventListener('click', () => {
                 this.controller.handleCourseClick(course.courseId);
-                courseElement.style.backgroundColor = 'deepskyblue';
             });
             this.availableCoursesContainer.appendChild(courseElement);
         });
@@ -99,8 +101,12 @@ class CourseController {
     handleCourseClick(courseId) {
         if (this.getSelectedCourses().some(course => course.courseId === courseId)) {
             this.model.unselectCourse(courseId);
+            this.isSelected = false;
+            
+            
         } else {
             this.model.selectCourse(courseId);
+            this.isSelected = true;
         }
         this.view.renderCourses();
     }
